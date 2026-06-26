@@ -342,8 +342,11 @@ class GMEEK():
             if issue.body==None:
                 self.blogBase[listJsonName][postNum]["description"]=''
                 self.blogBase[listJsonName][postNum]["wordCount"]=0
+                clean_body=''
             else:
-                self.blogBase[listJsonName][postNum]["wordCount"]=len(issue.body)
+                # 剥离 ##{}## 标记，用于 description、wordCount 和文件写入
+                clean_body = re.sub(r'<!--\s*##.+?##\s*-->', '', issue.body, flags=re.DOTALL).strip()
+                self.blogBase[listJsonName][postNum]["wordCount"]=len(clean_body)
                 if self.blogBase["rssSplit"]=="sentence":
                     if self.blogBase["i18n"]=="CN":
                         period="。"
@@ -351,7 +354,7 @@ class GMEEK():
                         period="."
                 else:
                     period=self.blogBase["rssSplit"]
-                desc_body = issue.body.split(period)[0].replace("\"", "\'").replace("\n", " ").replace("\r", "")
+                desc_body = clean_body.split(period)[0].replace("\"", "\'").replace("\n", " ").replace("\r", "")
                 self.blogBase[listJsonName][postNum]["description"] = desc_body + period
                 
             self.blogBase[listJsonName][postNum]["top"]=0
@@ -371,8 +374,6 @@ class GMEEK():
                     postConfig={}
             except:
                 postConfig={}
-            if match:
-                issue.body = re.sub(r'<!--\s*##.+?##\s*-->', '', issue.body, flags=re.DOTALL).strip()
 
             if "timestamp" in postConfig:
                 self.blogBase[listJsonName][postNum]["createdAt"]=postConfig["timestamp"]
@@ -408,10 +409,7 @@ class GMEEK():
             mdFileName=re.sub(r'[<>:/\\|?*\"]|[\0-\31]', '-', issue.title)
             f = open(self.backup_dir+mdFileName+".md", 'w', encoding='UTF-8')
             
-            if issue.body==None:
-                f.write('')
-            else:
-                f.write(issue.body)
+            f.write(clean_body)
             f.close()
             return listJsonName
 
