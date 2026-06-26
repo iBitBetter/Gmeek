@@ -360,6 +360,7 @@ class GMEEK():
 
             try:
                 match = re.search(r'<!--\s*##(.+?)##\s*-->', issue.body, re.DOTALL)
+                post_body = re.sub(r'<img(?![^>]*loading=)', '<img loading="lazy"', post_body)
                 if match:
                     postConfig=json.loads(match.group(1))
                     print("Has Custom JSON parameters")
