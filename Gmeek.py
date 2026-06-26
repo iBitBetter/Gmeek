@@ -150,6 +150,11 @@ class GMEEK():
         post_body=self.markdown2html(f.read())
         f.close()
 
+        # 修复 camo 代理：用 data-canonical-src 替换 camo src
+        post_body = re.sub(r'(<img[^>]*?)src="https://camo\.githubusercontent\.com/[^"]*"([^>]*?)data-canonical-src="([^"]*)"([^>]*?>)', r'\1src="\3"\2\4', post_body)
+        # 去掉图片外层 <a> 链接的 camo href
+        post_body = re.sub(r'(<a[^>]*?)href="https://camo\.githubusercontent\.com/[^"]*"([^>]*?>)', r'\1href="#"\2', post_body)
+
         postBase=self.blogBase.copy()
 
         if '<math-renderer' in post_body:
