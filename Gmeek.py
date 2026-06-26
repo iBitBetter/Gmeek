@@ -351,7 +351,8 @@ class GMEEK():
                         period="."
                 else:
                     period=self.blogBase["rssSplit"]
-                self.blogBase[listJsonName][postNum]["description"]=issue.body.split(period)[0].replace("\"", "\'")+period
+                desc_body = issue.body.split(period)[0].replace("\"", "\'").replace("\n", " ").replace("\r", "")
+                self.blogBase[listJsonName][postNum]["description"] = desc_body + period
                 
             self.blogBase[listJsonName][postNum]["top"]=0
             for event in issue.get_events():
@@ -370,6 +371,8 @@ class GMEEK():
                     postConfig={}
             except:
                 postConfig={}
+            if match:
+                issue.body = re.sub(r'<!--\s*##.+?##\s*-->', '', issue.body, flags=re.DOTALL).strip()
 
             if "timestamp" in postConfig:
                 self.blogBase[listJsonName][postNum]["createdAt"]=postConfig["timestamp"]
