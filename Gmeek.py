@@ -154,6 +154,8 @@ class GMEEK():
         post_body = re.sub(r'(<img[^>]*?)src="https://camo\.githubusercontent\.com/[^"]*"([^>]*?)data-canonical-src="([^"]*)"([^>]*?>)', r'\1src="\3"\2\4', post_body)
         # 去掉图片外层 <a> 链接的 camo href
         post_body = re.sub(r'(<a[^>]*?)href="https://camo\.githubusercontent\.com/[^"]*"([^>]*?>)', r'\1href="#"\2', post_body)
+        # 给所有图片添加 lazy loading
+        post_body = re.sub(r'<img(?![^>]*loading=)', '<img loading="lazy"', post_body)
 
         postBase=self.blogBase.copy()
 
@@ -360,7 +362,6 @@ class GMEEK():
 
             try:
                 match = re.search(r'<!--\s*##(.+?)##\s*-->', issue.body, re.DOTALL)
-                post_body = re.sub(r'<img(?![^>]*loading=)', '<img loading="lazy"', post_body)
                 if match:
                     postConfig=json.loads(match.group(1))
                     print("Has Custom JSON parameters")
