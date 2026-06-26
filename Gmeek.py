@@ -359,7 +359,7 @@ class GMEEK():
                     self.blogBase[listJsonName][postNum]["top"]=0
 
             try:
-                match = re.search(r'<!--\s*##\{(.+?)\}\s*##\s*-->', issue.body, re.DOTALL)
+                 match = re.search(r'<!--\s*##(.+?)##\s*-->', issue.body, re.DOTALL)
                 if match:
                     postConfig=json.loads(match.group(1))
                     print("Has Custom JSON parameters")
