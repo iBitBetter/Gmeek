@@ -68,7 +68,21 @@
 {% endblock %}
 
 {% block content %}
-<div class="markdown-body" id="postBody">{{ blogBase['postBody'] }}</div>
+<div class="markdown-body" id="postBody">{{ blogBase['postBody'] }}
+    <!-- 在 post.html 文章正文后添加 -->
+<section class="related-posts">
+  <h2>相关推荐</h2>
+  <ul>
+    {% for post in related_posts[:5] %}
+    <li>
+      <a href="/post/{{ post.issueNumber }}.html">{{ post.title }}</a>
+      <span class="post-date">{{ post.createdTime[:10] }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+</div>
+
 <div style="font-size:small;margin-top:8px;float:right;">{{ blogBase['bottomText'] }}</div>
 {% if blogBase['needComment']==1 %}
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">{{ i18n['comments'] }}</button>
