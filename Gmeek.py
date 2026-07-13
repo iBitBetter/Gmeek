@@ -220,23 +220,26 @@ class GMEEK():
         cur_url = issue.get("postUrl")
         ranked = []
         for _k, p in all_posts.items():
-        if not isinstance(p, dict):
-        continue
-        if p.get("postUrl") == cur_url:
-        continue # 跳过自己
-        shared = len(cur_labels & set(p.get("labels", []) or []))
-        if shared > 0:
-        ranked.append((shared, p.get("createdDate", ""), p))
+            if not isinstance(p, dict):
+                continue
+            if p.get("postUrl") == cur_url:
+                continue
+            shared = len(cur_labels & set(p.get("labels", []) or []))
+            if shared > 0:
+                ranked.append((shared, p.get("createdDate", ""), p))
         if ranked:
-        # 同标签越多越靠前；其次日期越新越靠前（"YYYY-MM-DD" 逆序即最新）
-        ranked.sort(key=lambda x: (-x[0], x[1]), reverse=True)
-        related_posts = [p for _, _, p in ranked[:5]]
+            ranked.sort(key=lambda x: (-x[0], x[1]), reverse=True)
+            related_posts = [p for _, _, p in ranked[:5]]
         else:
-        # 兜底：无同标签文章时，推荐最新 5 篇
-        recent = [(p.get("createdDate", ""), p) for _k, p in all_posts.items()
-        if isinstance(p, dict) and p.get("postUrl") != cur_url]
-        recent.sort(key=lambda x: x[0], reverse=True)
-        related_posts = [p for _, p in recent[:5]]
+            recent = [(p.get("createdDate", ""), p) for _k, p in all_posts.items()
+                      if isinstance(p, dict) and p.get("postUrl") != cur_url]
+            recent.sort(key=lambda x: x[0], reverse=True)
+            related_posts = [p for _, p in recent[:5]]
+
+        postIcon=dict(zip(keys, map(IconBase.get, keys)))
+        self.renderHtml('post.html',postBase,{},issue["htmlDir"],postIcon,related_posts=related_posts)
+        print("create postPage title=%s file=%s " % (issue["postTitle"],issue["htmlDir"]))
+
 
         postIcon=dict(zip(keys, map(IconBase.get, keys)))
         self.renderHtml('post.html',postBase,{},issue["htmlDir"],postIcon,related_posts=related_posts)
