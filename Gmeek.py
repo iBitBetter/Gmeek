@@ -197,6 +197,7 @@ class GMEEK():
         postBase["script"]=issue["script"]
         postBase["head"]=issue["head"]
         postBase["top"]=issue["top"]
+        postBase["createdDate"]=issue["createdDate"]
         postBase["postSourceUrl"]=issue["postSourceUrl"]
         postBase["repoName"]=options.repo_name
         
