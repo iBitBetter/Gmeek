@@ -103,6 +103,20 @@
 {% block content %}
 <div class="markdown-body" id="postBody">{{ blogBase['postBody'] }}</div>
 
+{% if related_posts %}
+<section class="related-posts">
+  <h2 class="related-title">相关推荐</h2>
+  <ul class="related-list">
+    {% for post in related_posts %}
+    <li>
+      <a href="{{ blogBase['homeUrl'] }}/{{ post.postUrl }}">{{ post.postTitle }}</a>
+      <span class="related-date">{{ post.createdDate }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 <div style="font-size:small;margin-top:8px;float:right;">{{ blogBase['bottomText'] }}</div>
 {% if blogBase['needComment']==1 %}
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">{{ i18n['comments'] }}</button>
