@@ -15,17 +15,23 @@
   "@type": "Article",
   "headline": {{ blogBase['postTitle'] | tojson }},
   "datePublished": "{{ blogBase.get('createdDate') or '' }}",
+  "dateModified": "{{ blogBase.get('createdDate') or '' }}",
   "author": {
     "@type": "Person",
-    "name": "iBitBetter"
+    "name": "iBitBetter",
+    "url": "{{ blogBase['homeUrl'] }}/about.html"
   },
   "publisher": {
     "@type": "Organization",
     "name": "iBitBetter",
     "logo": {
       "@type": "ImageObject",
-      "url": "{{ blogBase['ogImage'] }}"
+      "url": "{{ blogBase['homeUrl'] }}/assets/ibitbetter.webp"
     }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ blogBase['postUrl'] }}"
   },
   "image": "{{ blogBase['ogImage'] }}",
   "url": "{{ blogBase['postUrl'] }}"
