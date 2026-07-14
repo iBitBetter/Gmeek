@@ -13,6 +13,18 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
     {%- endif -%}
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "iBitBetter",
+      "url": "https://ibitbetter.space",
+      "description": "奇趣网站评测 · 效率工具推荐 · 技术教程",
+      "logo": "https://ibitbetter.space/assets/ibitbetter.webp"
+    }
+    </script>
+    
     {% block head %}{% endblock %}
 </head>
 <style>
