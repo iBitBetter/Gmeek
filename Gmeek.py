@@ -332,8 +332,12 @@ class GMEEK():
         self.blogBase["labelSlugDict"] = label_slug
 
         # 3) 页面 header 图标（与 createPlistHtml 保持一致）
-        keys = ['sun', 'moon', 'sync', 'home', 'search', 'post']
+        keys = list(OrderedDict.fromkeys(
+            ['sun', 'moon', 'sync', 'search', 'rss', 'upload', 'post']
+            + self.blogBase["singlePage"]
+        ))
         icon = {**dict(zip(keys, map(IconBase.get, keys))), **self.blogBase["iconList"]}
+
 
         # 4) 逐标签渲染静态页
         for tag, posts in tag_posts.items():
