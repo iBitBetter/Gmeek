@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 {% block head %}
-<meta name="description" content="{{ blogBase['subTitle'] }}">
-<link rel="canonical" href="{{ blogBase['pageUrl'] }}">
-<meta property="og:title" content="{{ blogBase['title'] }}">
-<meta property="og:description" content="{{ blogBase['subTitle'] }}">
-<meta property="og:type" content="blog">
-<meta property="og:url" content="{{ blogBase['homeUrl'] }}">
+<meta name="description" content="{{ blogBase['pageDesc'] }}">
+<meta property="og:title" content="{{ blogBase['pageTitle'] }}">
+<meta property="og:description" content="{{ blogBase['pageDesc'] }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ blogBase['pageUrl'] }}">
 <meta property="og:image" content="{{ blogBase['ogImage'] }}">
-<title>{{ blogBase['title'] }}</title>
-<link rel="canonical" href="{{ blogBase['homeUrl'] }}/">
+<title>{{ blogBase['pageTitle'] }}</title>
+<link rel="canonical" href="{{ blogBase['pageUrl'] }}">
 {% endblock %}
 
 {% block style %}
@@ -84,9 +83,13 @@
 
 {% block content %}
 <div style="margin-bottom: 16px;">{{ blogBase['pageDesc'] }}</div>
+<nav class="SideNav border">
 {% for num in postListJson -%}
-<a class="SideNav-item d-flex flex-items-center flex-justify-between" href="{{ postListJson[num]['postUrl']|e }}">
-    {# …… 文章标题/图标 原样复制 plist.html …… #}
+<a class="SideNav-item d-flex flex-items-center flex-justify-between" href="{{ blogBase['homeUrl'] }}/{{ postListJson[num]['postUrl']|e }}">
+    <div class="d-flex flex-items-center">
+        <svg class="SideNav-icon octicon" style="width:16px;height:16px"><path class="svgTop{{ postListJson[num]['top'] }}" d=""></path></svg>
+        <span class="listTitle">{{ postListJson[num]['postTitle']|e }}</span>
+    </div>
     <div class="listLabels">
         {% if postListJson[num]['commentNum']>0 %}<span class="Label" style="background-color:{{ blogBase['commentLabelColor'] }}">{{ postListJson[num]['commentNum'] }}</span>{% endif %}
         {% for label in postListJson[num]['labels'] -%}
@@ -97,24 +100,6 @@
 </a>
 {%- endfor %}
 </nav>
-{%- if blogBase['prevUrl']!='disabled' or blogBase['nextUrl']!='disabled' -%}
-<nav class="paginate-container" aria-label="Pagination">
-    <div class="pagination">
-        {%- if blogBase['prevUrl']=='disabled' -%}
-        <span class="previous_page" aria-disabled="true">{{ i18n['Previous'] }}</span>
-        {% else -%}
-        <a class="previous_page" rel="previous" href="{{ blogBase['homeUrl'] }}{{ blogBase['prevUrl'] }}" aria-label="Previous Page">{{ i18n['Previous'] }}</a>
-        {%- endif -%}
-
-        {%- if blogBase['nextUrl']=='disabled' -%}
-        <span class="next_page" aria-disabled="true">{{ i18n['Next'] }}</span>
-        {% else -%}
-        <a class="next_page" rel="next" href="{{ blogBase['homeUrl'] }}{{ blogBase['nextUrl'] }}" aria-label="Next Page">{{ i18n['Next'] }}</a>
-        {%- endif -%}
-
-    </div>
-</nav>
-{%- endif %}
 {% endblock %}
 
 {% block script %}
