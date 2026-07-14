@@ -156,6 +156,10 @@ class GMEEK():
         text = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', text)
         text = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', text)
         text = re.sub(r'[`*_#>~]', '', text)
+        # 去除 Obsidian callout 标签，如 [!TIP] [!NOTE]
+        text = re.sub(r'$$![A-Za-z]+$$', '', text)
+        # 去除孤立方括号（无链接），如 [SearchEmoji] [「花快图」]
+        text = re.sub(r'$$([^$$]*)\]', r'\1', text)
         text = re.sub(r'\s+', ' ', text).strip()
         if len(text) > 100:
             text = text[:100].rstrip('，。、；：,.;: ')
