@@ -326,7 +326,20 @@ class GMEEK():
         for num, post in self.blogBase["postListJson"].items():
             for label in (post.get("labels") or []):
                 tag_posts.setdefault(label, {})[num] = post
+        # 1) 聚合...
+        tag_posts = {}
+        for num, post in self.blogBase["postListJson"].items():
+            for label in (post.get("labels") or []):
+                tag_posts.setdefault(label, {})[num] = post
 
+        # 1.5) 每个标签内按置顶优先+时间降序排列（与 createPlistHtml 排序逻辑一致）
+        for label in tag_posts:
+            tag_posts[label] = dict(sorted(
+                tag_posts[label].items(),
+                key=lambda x: (x[1]["top"], x[1]["createdAt"]),
+                reverse=True
+            ))
+            
         # 2) label -> slug 映射（供模板里把标签链接指向真实静态页）
         label_slug = {label: Pinyin().get_pinyin(label).replace(' ', '-') for label in tag_posts}
         self.blogBase["labelSlugDict"] = label_slug
