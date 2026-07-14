@@ -17,6 +17,7 @@
   "datePublished": "{{ blogBase.get('createdDate') or '' }}",
   "dateModified": "{{ blogBase.get('createdDate') or '' }}",
   "author": {
+    "@id": "{{ blogBase['homeUrl'] }}/about.html#author",
     "@type": "Person",
     "name": "iBitBetter",
     "url": "{{ blogBase['homeUrl'] }}/about.html"
