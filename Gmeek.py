@@ -512,9 +512,9 @@ class GMEEK():
 
         for issue in self.blogBase["singeListJson"].values():
             self.createPostHtml(issue)
-
-        self.createPlistHtml()
+            
         self.createTagPages()        # ← 新增：生成 /tags/*.html 静态标签页
+        self.createPlistHtml()        
         self.createFeedXml()
         print("====== create static html end ======")
 
