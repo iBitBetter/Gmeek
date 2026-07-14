@@ -312,7 +312,45 @@ class GMEEK():
 
         self.renderHtml('tag.html',self.blogBase,onePageList,self.root_dir+"tag.html",tagIcon)
         print("create tag.html")
+        
+    def createTagPages(self):
+        """为每个 GitHub issue label 生成独立静态页 /tags/<slug>.html。
+        解决原 tag.html 前端 hash 过滤导致分类内容无法被 Google 收录的问题。"""
+        import os
+        tags_dir = self.root_dir + "tags/"
+        if not os.path.exists(tags_dir):
+            os.makedirs(tags_dir)
 
+        # 1) 聚合：标签 -> 该标签下文章（postListJson 已自动排除 singlePage 文章）
+        tag_posts = {}
+        for num, post in self.blogBase["postListJson"].items():
+            for label in (post.get("labels") or []):
+                tag_posts.setdefault(label, {})[num] = post
+
+        # 2) label -> slug 映射（供模板里把标签链接指向真实静态页）
+        label_slug = {label: Pinyin().get_pinyin(label).replace(' ', '-') for label in tag_posts}
+        self.blogBase["labelSlugDict"] = label_slug
+
+        # 3) 页面 header 图标（与 createPlistHtml 保持一致）
+        keys = ['sun', 'moon', 'sync', 'home', 'search', 'post']
+        icon = {**dict(zip(keys, map(IconBase.get, keys))), **self.blogBase["iconList"]}
+
+        # 4) 逐标签渲染静态页
+        for tag, posts in tag_posts.items():
+            slug = label_slug[tag]
+            page_url = self.blogBase["homeUrl"] + "/tags/" + slug + ".html"
+            page_title = "%s - %s" % (tag, self.blogBase["title"])
+            page_desc = "%s 主题文章共 %d 篇，精选自 %s，涵盖工具推荐、使用教程与实测体验。" % (tag, len(posts), self.blogBase["title"])
+
+            # 临时写入 blogBase 供 tagpage.html 读取，渲染后恢复（避免污染后续页面）
+            saved = (self.blogBase.get("pageTitle"), self.blogBase.get("pageDesc"), self.blogBase.get("pageUrl"))
+            self.blogBase["pageTitle"] = page_title
+            self.blogBase["pageDesc"] = page_desc
+            self.blogBase["pageUrl"] = page_url
+            self.renderHtml('tagpage.html', self.blogBase, posts, tags_dir + slug + ".html", icon)
+            self.blogBase["pageTitle"], self.blogBase["pageDesc"], self.blogBase["pageUrl"] = saved
+
+            print("create tags/" + slug + ".html  (%d posts)" % len(posts))
     def createFeedXml(self):
         self.blogBase["postListJson"]=dict(sorted(self.blogBase["postListJson"].items(),key=lambda x:x[1]["createdAt"],reverse=False))#使列表由时间排序
         feed = FeedGenerator()
