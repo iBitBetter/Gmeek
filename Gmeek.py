@@ -514,6 +514,7 @@ class GMEEK():
             self.createPostHtml(issue)
 
         self.createPlistHtml()
+        self.createTagPages()        # ← 新增：生成 /tags/*.html 静态标签页
         self.createFeedXml()
         print("====== create static html end ======")
 
