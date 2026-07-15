@@ -341,7 +341,19 @@ class GMEEK():
             ))
             
         # 2) label -> slug 映射（供模板里把标签链接指向真实静态页）
-        label_slug = {label: Pinyin().get_pinyin(label).replace(' ', '-') for label in tag_posts}
+        # 中文标签 -> 英文 slug 映射；未在字典里的标签自动回退拼音，避免 404
+        LABEL_SLUG_MAP = {
+            "奇趣网站": "fun-sites",
+            "技术": "tech",
+            "软件": "software",
+            "Windows": "windows",
+            "豆瓣读书": "douban-reading",
+        }
+        label_slug = {
+            label: LABEL_SLUG_MAP.get(label, Pinyin().get_pinyin(label).replace(' ', '-'))
+            for label in tag_posts
+        }
+        
         self.blogBase["labelSlugDict"] = label_slug
 
         # 3) 页面 header 图标（与 createPlistHtml 保持一致）
