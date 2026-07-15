@@ -355,21 +355,21 @@ class GMEEK():
         # 4) 逐标签渲染静态页
         for tag, posts in tag_posts.items():
             slug = label_slug[tag]
-        page_url = self.blogBase["homeUrl"] + "/tags/" + slug + ".html"
-        page_title = "%s - %s" % (tag, self.blogBase["title"])
-        page_desc = "%s 主题文章共 %d 篇，精选自 %s，涵盖工具推荐、使用教程与实测体验。" % (tag, len(posts), self.blogBase["title"])
+            page_url = self.blogBase["homeUrl"] + "/tags/" + slug + ".html"
+            page_title = "%s - %s" % (tag, self.blogBase["title"])
+            page_desc = "%s 主题文章共 %d 篇，精选自 %s，涵盖工具推荐、使用教程与实测体验。" % (tag, len(posts), self.blogBase["title"])
 
-        # 临时写入 blogBase 供 tagpage.html 读取，渲染后恢复（避免污染后续页面）
-        saved = (self.blogBase.get("pageTitle"), self.blogBase.get("pageDesc"), self.blogBase.get("pageUrl"), self.blogBase.get("pageTag"), self.blogBase.get("pageCount"))
-        self.blogBase["pageTitle"] = page_title
-        self.blogBase["pageDesc"] = page_desc
-        self.blogBase["pageUrl"] = page_url
-        self.blogBase["pageTag"] = tag
-        self.blogBase["pageCount"] = len(posts)
-        self.renderHtml('tagpage.html', self.blogBase, posts, tags_dir + slug + ".html", icon)
-        self.blogBase["pageTitle"], self.blogBase["pageDesc"], self.blogBase["pageUrl"], self.blogBase["pageTag"], self.blogBase["pageCount"] = saved
-
-        print("create tags/" + slug + ".html  (%d posts)" % len(posts))
+            # 临时写入 blogBase 供 tagpage.html 读取，渲染后恢复（避免污染后续页面）
+            saved = (self.blogBase.get("pageTitle"), self.blogBase.get("pageDesc"), self.blogBase.get("pageUrl"), self.blogBase.get("pageTag"), self.blogBase.get("pageCount"))
+            self.blogBase["pageTitle"] = page_title
+            self.blogBase["pageDesc"] = page_desc
+            self.blogBase["pageUrl"] = page_url
+            self.blogBase["pageTag"] = tag
+            self.blogBase["pageCount"] = len(posts)
+            self.renderHtml('tagpage.html', self.blogBase, posts, tags_dir + slug + ".html", icon)
+            self.blogBase["pageTitle"], self.blogBase["pageDesc"], self.blogBase["pageUrl"], self.blogBase["pageTag"], self.blogBase["pageCount"] = saved
+            print("create tags/" + slug + ".html  (%d posts)" % len(posts))
+            
     def createFeedXml(self):
         self.blogBase["postListJson"]=dict(sorted(self.blogBase["postListJson"].items(),key=lambda x:x[1]["createdAt"],reverse=False))#使列表由时间排序
         feed = FeedGenerator()
