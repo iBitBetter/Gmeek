@@ -369,7 +369,7 @@ class GMEEK():
         self.renderHtml('tagpage.html', self.blogBase, posts, tags_dir + slug + ".html", icon)
         self.blogBase["pageTitle"], self.blogBase["pageDesc"], self.blogBase["pageUrl"], self.blogBase["pageTag"], self.blogBase["pageCount"] = saved
 
-            print("create tags/" + slug + ".html  (%d posts)" % len(posts))
+        print("create tags/" + slug + ".html  (%d posts)" % len(posts))
     def createFeedXml(self):
         self.blogBase["postListJson"]=dict(sorted(self.blogBase["postListJson"].items(),key=lambda x:x[1]["createdAt"],reverse=False))#使列表由时间排序
         feed = FeedGenerator()
