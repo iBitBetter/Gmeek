@@ -348,6 +348,7 @@ class GMEEK():
             "软件": "software",
             "Windows": "windows",
             "豆瓣读书": "douban-reading",
+            "合集":"collection"
         }
         label_slug = {
             label: LABEL_SLUG_MAP.get(label, Pinyin().get_pinyin(label).replace(' ', '-'))
